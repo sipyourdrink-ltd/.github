@@ -1,0 +1,74 @@
+name: Refresh badge values
+
+# Hard-codes live numbers (PyPI version, downloads/mo, GitHub stars) directly
+# into profile/README.md so the badges render as shields.io STATIC URLs — no
+# upstream fetch happens at render time, so the org page never shows
+# "rate limited by upstream service" again. Cron pulls fresh values once a
+# day; commits only if a value actually changed.
+
+on:
+  schedule:
+    - cron: '17 5 * * *'  # daily at 05:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-badges
+  cancel-in-progress: true
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch live values
+        id: fetch
+        run: |
+          set -euo pipefail
+          fmt() {
+            local n=$1
+            if   [ "$n" -ge 1000000 ]; then awk -v n="$n" 'BEGIN{printf "%.1fM", n/1000000}'
+            elif [ "$n" -ge 10000   ]; then awk -v n="$n" 'BEGIN{printf "%.0fk",  n/1000}'
+            elif [ "$n" -ge 1000    ]; then awk -v n="$n" 'BEGIN{printf "%.1fk",  n/1000}'
+            else echo "$n"
+            fi
+          }
+          MO_RAW=$(curl -fsS https://pypistats.org/api/packages/bernstein/recent | jq -r '.data.last_month')
+          VER=$(curl -fsS https://pypi.org/pypi/bernstein/json | jq -r '.info.version')
+          STARS_RAW=$(curl -fsS -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/sipyourdrink-ltd/bernstein | jq -r '.stargazers_count')
+          MO=$(fmt "$MO_RAW")
+          STARS=$(fmt "$STARS_RAW")
+          echo "ver=$VER"     >> "$GITHUB_OUTPUT"
+          echo "mo=$MO"       >> "$GITHUB_OUTPUT"
+          echo "stars=$STARS" >> "$GITHUB_OUTPUT"
+          echo "Fetched: pypi=$VER, downloads/mo=$MO_RAW ($MO), stars=$STARS_RAW ($STARS)"
+
+      - name: Rewrite README badge values
+        env:
+          VER: ${{ steps.fetch.outputs.ver }}
+          MO: ${{ steps.fetch.outputs.mo }}
+          STARS: ${{ steps.fetch.outputs.stars }}
+        run: |
+          set -euo pipefail
+          # Each sed targets only the value segment between the dashes in
+          # `img.shields.io/badge/<label>-<value>-<color>` so we don't touch
+          # colors or labels accidentally.
+          sed -i -E "s|(img\\.shields\\.io/badge/pypi-)[^-]+(-1A1613)|\\1${VER}\\2|"            profile/README.md
+          sed -i -E "s|(img\\.shields\\.io/badge/stars-)[^-]+(-1A1613)|\\1${STARS}\\2|"        profile/README.md
+          sed -i -E "s|(img\\.shields\\.io/badge/downloads%2Fmo-)[^-]+(-1A1613)|\\1${MO}\\2|"  profile/README.md
+
+      - name: Commit if changed
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- profile/README.md; then
+            echo "No badge changes — skipping commit."
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add profile/README.md
+          git commit -m "chore(badges): refresh values (pypi=${{ steps.fetch.outputs.ver }}, mo=${{ steps.fetch.outputs.mo }}, stars=${{ steps.fetch.outputs.stars }})"
+          git push
