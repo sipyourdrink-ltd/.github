@@ -21,9 +21,9 @@ A studio of one. Software that respects your time, your inbox, and your attentio
 Deterministic orchestrator for 30+ CLI AI coding agents. Git worktree isolation, quality gates, MCP server mode. Apache-2.0.
 
 <!-- badges:start (auto-refreshed daily by .github/workflows/refresh-badges.yml — do not hand-edit the values) -->
-[![PyPI](https://img.shields.io/badge/pypi-1.11.0-1A1613?labelColor=F4EEE2)](https://pypi.org/project/bernstein/)
-[![Stars](https://img.shields.io/badge/stars-371-1A1613?labelColor=F4EEE2)](https://github.com/sipyourdrink-ltd/bernstein/stargazers)
-[![Downloads](https://img.shields.io/badge/downloads%2Fmo-96k-1A1613?labelColor=F4EEE2)](https://pypistats.org/packages/bernstein)
+[![PyPI](https://img.shields.io/badge/pypi-2.1.0-1A1613?labelColor=F4EEE2)](https://pypi.org/project/bernstein/)
+[![Stars](https://img.shields.io/badge/stars-398-1A1613?labelColor=F4EEE2)](https://github.com/sipyourdrink-ltd/bernstein/stargazers)
+[![Downloads](https://img.shields.io/badge/downloads%2Fmo-110k-1A1613?labelColor=F4EEE2)](https://pypistats.org/packages/bernstein)
 [![License](https://img.shields.io/badge/license-Apache--2.0-1A1613?labelColor=F4EEE2)](https://github.com/sipyourdrink-ltd/bernstein/blob/main/LICENSE)
 <!-- badges:end -->
 
