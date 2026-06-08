@@ -22,8 +22,8 @@ Deterministic orchestrator for 30+ CLI AI coding agents. Git worktree isolation,
 
 <!-- badges:start (auto-refreshed daily by .github/workflows/refresh-badges.yml — do not hand-edit the values) -->
 [![PyPI](https://img.shields.io/badge/pypi-2.7.0-1A1613?labelColor=F4EEE2)](https://pypi.org/project/bernstein/)
-[![Stars](https://img.shields.io/badge/stars-554-1A1613?labelColor=F4EEE2)](https://github.com/sipyourdrink-ltd/bernstein/stargazers)
-[![Downloads](https://img.shields.io/badge/downloads%2Fmo-174k-1A1613?labelColor=F4EEE2)](https://pypistats.org/packages/bernstein)
+[![Stars](https://img.shields.io/badge/stars-559-1A1613?labelColor=F4EEE2)](https://github.com/sipyourdrink-ltd/bernstein/stargazers)
+[![Downloads](https://img.shields.io/badge/downloads%2Fmo-180k-1A1613?labelColor=F4EEE2)](https://pypistats.org/packages/bernstein)
 [![License](https://img.shields.io/badge/license-Apache--2.0-1A1613?labelColor=F4EEE2)](https://github.com/sipyourdrink-ltd/bernstein/blob/main/LICENSE)
 <!-- badges:end -->
 
