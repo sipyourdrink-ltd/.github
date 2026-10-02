@@ -36,11 +36,31 @@ jobs:
             else echo "$n"
             fi
           }
-          MO_RAW=$(curl -fsS https://pypistats.org/api/packages/bernstein/recent | jq -r '.data.last_month')
-          VER=$(curl -fsS https://pypi.org/pypi/bernstein/json | jq -r '.info.version')
-          STARS_RAW=$(curl -fsS -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/sipyourdrink-ltd/bernstein | jq -r '.stargazers_count')
-          MO=$(fmt "$MO_RAW")
+          # pypistats.org rate-limits shared runner IPs (HTTP 429) on roughly
+          # half of the daily runs. Retry with backoff (curl honours
+          # Retry-After) and send an identifying User-Agent.
+          get() {
+            curl -fsS --retry 5 --retry-delay 15 --retry-max-time 300 \
+              -A "sipyourdrink-ltd/.github badge-refresh" "$@"
+          }
+          VER=$(get https://pypi.org/pypi/bernstein/json | jq -er '.info.version')
+          STARS_RAW=$(get -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/sipyourdrink-ltd/bernstein | jq -er '.stargazers_count')
           STARS=$(fmt "$STARS_RAW")
+          # Downloads/mo is the only third-party-throttled value. If it is still
+          # unavailable after retries, keep the value currently in the README
+          # and say so loudly; the other values still refresh and PyPI/GitHub
+          # failures still fail the job.
+          if MO_RAW=$(get https://pypistats.org/api/packages/bernstein/recent | jq -er '.data.last_month'); then
+            MO=$(fmt "$MO_RAW")
+          else
+            MO=$(grep -oE 'img\.shields\.io/badge/downloads%2Fmo-[^-]+-' profile/README.md | head -n1 | sed -E 's|.*mo-([^-]+)-|\1|')
+            if [ -z "$MO" ]; then
+              echo "::error::pypistats.org unavailable after retries and no existing downloads badge value in profile/README.md to keep"
+              exit 1
+            fi
+            MO_RAW="unavailable"
+            echo "::warning::pypistats.org unavailable after retries; keeping existing downloads/mo badge value ($MO)"
+          fi
           echo "ver=$VER"     >> "$GITHUB_OUTPUT"
           echo "mo=$MO"       >> "$GITHUB_OUTPUT"
           echo "stars=$STARS" >> "$GITHUB_OUTPUT"
