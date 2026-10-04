@@ -29,6 +29,14 @@ The open-source governance layer for AI agents. One isolated git worktree per ta
 
 → [`bernstein.run`](https://bernstein.run)
 
+## Also open source
+
+Small tools from building Bernstein, released on their own.
+
+**[segue](https://github.com/sipyourdrink-ltd/segue)** — Claude Code compaction that continues without a break. A handoff card is written before `/compact` and auto-compact, the summary runs on Haiku for about a cent, and the next session is told to carry on from the card.
+
+**[transpose](https://github.com/sipyourdrink-ltd/transpose)** — carry your Claude Code desktop sessions and sidebar groups to another account on the same Mac. Pointers are copied, transcripts stay where they are, and every write is backed up first.
+
 ---
 
 Tomorrow, something else.
