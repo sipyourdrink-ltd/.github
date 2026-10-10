@@ -29,6 +29,12 @@ The open-source governance layer for AI agents. One isolated git worktree per ta
 
 → [`bernstein.run`](https://bernstein.run)
 
+Around it, also public:
+
+**[bernstein-mcp](https://github.com/sipyourdrink-ltd/bernstein-mcp)** — stateless MCP endpoint that verifies Bernstein run receipts and hash chains. Live at [`mcp.bernstein.run`](https://mcp.bernstein.run).
+
+**[bernstein-landing](https://github.com/sipyourdrink-ltd/bernstein-landing)** — the `bernstein.run` site, plus the machine-readable surfaces that let agents read the project without scraping HTML.
+
 ## Also open source
 
 Small tools from building Bernstein, released on their own.
