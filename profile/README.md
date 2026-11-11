@@ -38,3 +38,5 @@ Tomorrow, something else.
 ## Studio
 
 [`sipyourdrink.ltd`](https://sipyourdrink.ltd) &nbsp;·&nbsp; [`hey@sipyourdrink.ltd`](mailto:hey@sipyourdrink.ltd)
+
+Sip Your Drink is the studio name of Alex Chernysh. It is not a registered company.
