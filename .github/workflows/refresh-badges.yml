@@ -1,6 +1,6 @@
 name: Refresh badge values
 
-# Hard-codes live numbers (PyPI version, downloads/mo, GitHub stars) directly
+# Hard-codes live numbers (PyPI version, GitHub stars) directly
 # into profile/README.md so the badges render as shields.io STATIC URLs — no
 # upstream fetch happens at render time, so the org page never shows
 # "rate limited by upstream service" again. Cron pulls fresh values once a
@@ -36,9 +36,8 @@ jobs:
             else echo "$n"
             fi
           }
-          # pypistats.org rate-limits shared runner IPs (HTTP 429) on roughly
-          # half of the daily runs. Retry with backoff (curl honours
-          # Retry-After) and send an identifying User-Agent.
+          # Retry with backoff (curl honours Retry-After) and send an
+          # identifying User-Agent.
           get() {
             curl -fsS --retry 5 --retry-delay 15 --retry-max-time 300 \
               -A "sipyourdrink-ltd/.github badge-refresh" "$@"
@@ -46,30 +45,13 @@ jobs:
           VER=$(get https://pypi.org/pypi/bernstein/json | jq -er '.info.version')
           STARS_RAW=$(get -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/sipyourdrink-ltd/bernstein | jq -er '.stargazers_count')
           STARS=$(fmt "$STARS_RAW")
-          # Downloads/mo is the only third-party-throttled value. If it is still
-          # unavailable after retries, keep the value currently in the README
-          # and say so loudly; the other values still refresh and PyPI/GitHub
-          # failures still fail the job.
-          if MO_RAW=$(get https://pypistats.org/api/packages/bernstein/recent | jq -er '.data.last_month'); then
-            MO=$(fmt "$MO_RAW")
-          else
-            MO=$(grep -oE 'img\.shields\.io/badge/downloads%2Fmo-[^-]+-' profile/README.md | head -n1 | sed -E 's|.*mo-([^-]+)-|\1|')
-            if [ -z "$MO" ]; then
-              echo "::error::pypistats.org unavailable after retries and no existing downloads badge value in profile/README.md to keep"
-              exit 1
-            fi
-            MO_RAW="unavailable"
-            echo "::warning::pypistats.org unavailable after retries; keeping existing downloads/mo badge value ($MO)"
-          fi
           echo "ver=$VER"     >> "$GITHUB_OUTPUT"
-          echo "mo=$MO"       >> "$GITHUB_OUTPUT"
           echo "stars=$STARS" >> "$GITHUB_OUTPUT"
-          echo "Fetched: pypi=$VER, downloads/mo=$MO_RAW ($MO), stars=$STARS_RAW ($STARS)"
+          echo "Fetched: pypi=$VER, stars=$STARS_RAW ($STARS)"
 
       - name: Rewrite README badge values
         env:
           VER: ${{ steps.fetch.outputs.ver }}
-          MO: ${{ steps.fetch.outputs.mo }}
           STARS: ${{ steps.fetch.outputs.stars }}
         run: |
           set -euo pipefail
@@ -78,7 +60,6 @@ jobs:
           # colors or labels accidentally.
           sed -i -E "s|(img\\.shields\\.io/badge/pypi-)[^-]+(-1A1613)|\\1${VER}\\2|"            profile/README.md
           sed -i -E "s|(img\\.shields\\.io/badge/stars-)[^-]+(-1A1613)|\\1${STARS}\\2|"        profile/README.md
-          sed -i -E "s|(img\\.shields\\.io/badge/downloads%2Fmo-)[^-]+(-1A1613)|\\1${MO}\\2|"  profile/README.md
 
       - name: Commit if changed
         run: |
@@ -90,5 +71,5 @@ jobs:
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add profile/README.md
-          git commit -m "chore(badges): refresh values (pypi=${{ steps.fetch.outputs.ver }}, mo=${{ steps.fetch.outputs.mo }}, stars=${{ steps.fetch.outputs.stars }})"
+          git commit -m "chore(badges): refresh values (pypi=${{ steps.fetch.outputs.ver }}, stars=${{ steps.fetch.outputs.stars }})"
           git push
