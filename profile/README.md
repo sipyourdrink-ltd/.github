@@ -1,5 +1,5 @@
 <div align="center">
-<img src="./sip-lockup-panel.svg" alt="Sip Your Drink Ltd" width="490">
+<img src="./sip-lockup-panel.svg" alt="Sip Your Drink" width="490">
 
 <br><br>
 
