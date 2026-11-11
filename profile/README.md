@@ -1,8 +1,5 @@
 <div align="center">
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./sip-lockup-dark.svg">
-  <img src="./sip-lockup.svg" alt="Sip Your Drink Ltd" width="420">
-</picture>
+<img src="./sip-lockup-panel.svg" alt="Sip Your Drink Ltd" width="490">
 
 <br><br>
 
