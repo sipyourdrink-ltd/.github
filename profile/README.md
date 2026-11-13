@@ -1,11 +1,8 @@
-<div align="center">
-<img src="./sip-lockup-panel.svg" alt="Sip Your Drink" width="490">
-
-<br><br>
-
-<em>Quiet tools for a noisy life.</em>
-
-</div>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sipyourdrink-ltd/.github/main/assets/brand/banner-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/sipyourdrink-ltd/.github/main/assets/brand/banner-light.svg">
+  <img alt="Sip Your Drink: Quiet tools for a noisy life." src="https://raw.githubusercontent.com/sipyourdrink-ltd/.github/main/assets/brand/banner-light.svg">
+</picture>
 
 ---
 
@@ -19,7 +16,6 @@ The open-source governance layer for AI agents. One isolated git worktree per ta
 
 <!-- badges:start (auto-refreshed daily by .github/workflows/refresh-badges.yml — do not hand-edit the values) -->
 [![PyPI](https://img.shields.io/badge/pypi-3.24.1-1A1613?labelColor=F4EEE2)](https://pypi.org/project/bernstein/)
-[![Stars](https://img.shields.io/badge/stars-1.2k-1A1613?labelColor=F4EEE2)](https://github.com/sipyourdrink-ltd/bernstein/stargazers)
 [![License](https://img.shields.io/badge/license-Apache--2.0-1A1613?labelColor=F4EEE2)](https://github.com/sipyourdrink-ltd/bernstein/blob/main/LICENSE)
 <!-- badges:end -->
 
