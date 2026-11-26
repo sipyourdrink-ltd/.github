@@ -15,7 +15,7 @@ A studio of one. Software that respects your time, your inbox, and your attentio
 The open-source governance layer for AI agents. One isolated git worktree per task and no model in the coordination loop, so a plan replays to the same task graph. Signed lineage, quality gates, MCP server mode, 50+ CLI agent adapters. Apache-2.0.
 
 <!-- badges:start (auto-refreshed daily by .github/workflows/refresh-badges.yml — do not hand-edit the values) -->
-[![PyPI](https://img.shields.io/badge/pypi-4.0.1-1A1613?labelColor=F4EEE2)](https://pypi.org/project/bernstein/)
+[![PyPI](https://img.shields.io/badge/pypi-4.0.2-1A1613?labelColor=F4EEE2)](https://pypi.org/project/bernstein/)
 [![License](https://img.shields.io/badge/license-Apache--2.0-1A1613?labelColor=F4EEE2)](https://github.com/sipyourdrink-ltd/bernstein/blob/main/LICENSE)
 <!-- badges:end -->
 
